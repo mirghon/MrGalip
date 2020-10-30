@@ -10,11 +10,21 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+/*
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+*/
+
 public class GUI extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private boolean activeStatus=false;
-	Galip galip = new Galip();
+/*	Galip galip = new Galip();
 
     public boolean getStatus() {
 		return activeStatus;
@@ -23,7 +33,7 @@ public class GUI extends javax.swing.JFrame {
 	public void setStatus(boolean status) {
 		this.activeStatus = status;
 	}
-
+*/
 	public GUI() {
         initComponents();
     }
@@ -32,7 +42,7 @@ public class GUI extends javax.swing.JFrame {
     	
 		BufferedImage icon = null;
 		try {
-			icon = ImageIO.read((new File("img/icon.png")));
+			icon = ImageIO.read((new File("Resources/icon.png")));
 		} catch (IOException e) {e.printStackTrace();}
 
         Panel = new javax.swing.JPanel();
@@ -117,8 +127,8 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(Button3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Label2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED/*, 37, Short.MAX_VALUE*/)
+                .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -155,22 +165,26 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_ToggleButtonMouseClicked
 
     private void ToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ToggleButtonActionPerformed
-        if (activeStatus) {
-            activeStatus=false;
-            galip.setStatus(false);
-            ToggleButton.setText("Start");
-            Label2.setText("Automatische Abfrageerkennung ist AUS.");
-        } else {
+
+		if (!activeStatus) {
             activeStatus=true;
-            galip.setStatus(true);
+//          galip.setStatus(true);
             ToggleButton.setText("Stop");
             Label2.setText("Automatische Abfrageerkennung ist AKTIV.");
-            galip.watch();
+			Start.log("Codeerkennung gestartet");
+			try{timer.scheduleAtFixedRate(pingcheck,0,5000);} catch (Exception e) {Start.err("Ausnahmefehler UI:174 - Erkennungsmodus ist bereits aktiv");}
+            
+        } else {
+            activeStatus=false;
+            ToggleButton.setText("Start");
+            Label2.setText("Automatische Abfrageerkennungist AUS.");
+            try{timer.purge();} catch (Exception e) {Start.err("Ausnahmefehler UI:180 - Erkennungsmodus konnte nicht deaktiviert werden");}
+            Start.log("Codeerkennung gestoppt");
         }
     }//GEN-LAST:event_ToggleButtonActionPerformed
 
     private void Button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button2ActionPerformed
-        new Screenbot().solveCode(false);
+        Screenbot.solveCode(false);
     }//GEN-LAST:event_Button2ActionPerformed
 
     private void Button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button3ActionPerformed
@@ -184,13 +198,13 @@ public class GUI extends javax.swing.JFrame {
 			BufferedWriter bw = new BufferedWriter(writer)) {
 				bw.write(LogPane.getText());
 				bw.close();
-		} catch (IOException e) {e.printStackTrace();}
+		} catch (IOException e) {Start.err("Fehler beim Speichern der Datei");}
         }
 
     }//GEN-LAST:event_Button3ActionPerformed
 
     //GEN-BEGIN:variables
-    private javax.swing.JToggleButton ToggleButton;
+	private javax.swing.JToggleButton ToggleButton;
     private javax.swing.JButton Button2;
     private javax.swing.JButton Button3;
     private javax.swing.JLabel Label1;
@@ -198,5 +212,9 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel Panel;
     private javax.swing.JScrollPane ScrollPane;
     private javax.swing.JTextPane LogPane;
+	Timer timer = new Timer(true);
+	TimerTask pingcheck = new Daemon();
+//	Daemon galip = new Daemon();
+	
     //GEN-END:variables
 }

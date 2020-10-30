@@ -8,8 +8,7 @@ import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -18,14 +17,13 @@ import net.sourceforge.tess4j.TesseractException;
 
 public class Screenbot {
 
-	BufferedImage screen = null;
-	BufferedImage image = null;
-	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-	Logger logger = Logger.getLogger("Screenbot");
+	private static BufferedImage screen = null;
+	private static BufferedImage image = null;
+//	private static Logger logger = Logger.getLogger("Screenbot");
 	
 	public Screenbot() {}
 
-	public int[] search(BufferedImage img) {
+	public static int[] search(BufferedImage img) {
 //		
 		
 		try {
@@ -63,7 +61,7 @@ public class Screenbot {
 		return arr;
 	}
 	
-	public int[] getNumbers(int x, int y) {
+	public static int[] getNumbers(int x, int y) {
 		
 		BufferedImage codeScr = null;
 //		File outputFile = null;
@@ -82,7 +80,10 @@ public class Screenbot {
 		} catch (AWTException e) {e.printStackTrace();}
 		
 		try {
-			File outputFile = new File ("img/last_output.bmp");
+			File outputFile = new File ("Resources/last_output.bmp");
+			Start.log("Path: "+outputFile.getPath());
+			Start.log("AbsPath: "+outputFile.getAbsolutePath());
+			Start.log("CanPath: "+outputFile.getCanonicalPath());
 			ImageIO.write(codeScr, "bmp", outputFile);
 		} catch (IOException e) {e.printStackTrace();}
 		
@@ -93,83 +94,84 @@ public class Screenbot {
 				if(Character.isDigit(result.charAt(i))) {
 					numbers[i] = Character.getNumericValue(result.charAt(i));
 					} else {
-					System.err.println("OCR-Fehler: Konnte "+(i+1)+". Ziffer nicht lesen");
+					Start.err("OCR-Fehler: Konnte "+(i+1)+". Ziffer nicht lesen");
 				};
 
 			}
-		} catch (TesseractException e) {System.err.println(e.getMessage());}
+//		} catch (TesseractException e) {Start.err(e.getMessage());}
+		} catch (TesseractException e) {Start.err("OCR-Fehler");}
 		
 		return numbers;
 		
 	}
 	
-	public void clickOn(int num) {
+	public static void clickOn(int num) {
 		
 		switch(num) {
 		case 0:
 			try {
-				image = ImageIO.read((new File("img/e0.bmp")));
+				image = ImageIO.read((new File("Resources/e0.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e0");
+				Start.err("IO Error: Could not read File for e0");
 			} break;
 		case 1:
 			try {
-				image = ImageIO.read((new File("img/e1.bmp")));
+				image = ImageIO.read((new File("Resources/e1.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e1");
+				Start.err("IO Error: Could not read File for e1");
 			} break;
 		case 2:
 			try {
-				image = ImageIO.read((new File("img/e2.bmp")));
+				image = ImageIO.read((new File("Resources/e2.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e2");
+				Start.err("IO Error: Could not read File for e2");
 			} break;
 		case 3:
 			try {
-				image = ImageIO.read((new File("img/e3.bmp")));
+				image = ImageIO.read((new File("Resources/e3.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e3");
+				Start.err("IO Error: Could not read File for e3");
 			} break;
 		case 4:
 			try {
-				image = ImageIO.read((new File("img/e4.bmp")));
+				image = ImageIO.read((new File("Resources/e4.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e4");
+				Start.err("IO Error: Could not read File for e4");
 			} break;
 		case 5:
 			try {
-				image = ImageIO.read((new File("img/e5.bmp")));
+				image = ImageIO.read((new File("Resources/e5.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e5");
+				Start.err("IO Error: Could not read File for e5");
 			} break;
 		case 6:
 			try {
-				image = ImageIO.read((new File("img/e6.bmp")));
+				image = ImageIO.read((new File("Resources/e6.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e6");
+				Start.err("IO Error: Could not read File for e6");
 			} break;
 		case 7:
 			try {
-				image = ImageIO.read((new File("img/e7.bmp")));
+				image = ImageIO.read((new File("Resources/e7.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e7");
+				Start.err("IO Error: Could not read File for e7");
 			} break;
 		case 8:
 			try {
-				image = ImageIO.read((new File("img/e8.bmp")));
+				image = ImageIO.read((new File("Resources/e8.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e8");
+				Start.err("IO Error: Could not read File for e8");
 			} break;
 		case 9:
 			try {
-				image = ImageIO.read((new File("img/e9.bmp")));
+				image = ImageIO.read((new File("Resources/e9.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for e9");
+				Start.err("IO Error: Could not read File for e9");
 			} break;
 		case 10:
 			for (int i = 1; i<6; i++) {
 				String nr = String.valueOf(i);
-				String src="img/abfrage"+nr+".bmp";
+				String src="Resources/abfrage"+nr+".bmp";
 				try {
 					image = ImageIO.read((new File(src)));
 			    } catch (IOException e) {e.printStackTrace();}
@@ -179,16 +181,16 @@ public class Screenbot {
 				} else {
 					if(i<5) {continue;
 					} else {
-						System.err.println("Absendefeld nicht erkannt");
+						Start.err("Absendefeld nicht erkannt");
 					}
 				}
 			}
 /*
 		case 11:
 			try {
-				image = ImageIO.read((new File("img/abfrage1.bmp")));
+				image = ImageIO.read((new File("Resources/abfrage1.bmp")));
 			} catch (IOException e) {
-				System.err.println("IO Error: Could not read File for \"Absenden\"");
+				Start.err("IO Error: Could not read File for \"Absenden\"");
 			} break;
 */
 		}
@@ -205,20 +207,19 @@ public class Screenbot {
 
 	}
 
-	public void solveCode(boolean repeated) {
+	public static void solveCode(boolean repeated) {
 		
 		for (int i = 1; i<6; i++) {
 		    String nr = String.valueOf(i);
-			String src="img/abfrage"+nr+".bmp";
+			String src="Resources/abfrage"+nr+".bmp";
 			try {
 				image = ImageIO.read((new File(src)));
 		    } catch (IOException e) {e.printStackTrace();}
 			int[] pingCheck = search(image);
 			if (pingCheck[0]==1) {
 				int[] code = getNumbers(pingCheck[1],pingCheck[2]);
-				System.out.println(java.time.LocalTime.now().format(dtf));
-				System.out.println("Abfragefeld erkannt (abfrage"+i+".bmp)");
-				System.out.println("Code: "+code[0]+code[1]+code[2]+code[3]);
+				Start.log("Abfragefeld erkannt (abfrage"+i+".bmp)");
+				Start.log("Code: "+code[0]+code[1]+code[2]+code[3]);
 				clickOn(code[0]);
 				clickOn(code[1]);
 				clickOn(code[2]);
@@ -229,7 +230,7 @@ public class Screenbot {
 				if(i<5) {continue;
 				} else {
 					if(repeated==false) {
-						System.err.println("Kein Abfragefeld erkannt");
+						Start.err("Kein Abfragefeld erkannt");
 					} else {}
 				}
 			}

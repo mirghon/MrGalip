@@ -1,15 +1,38 @@
 package reader;
 
-import java.util.logging.Logger;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+//import java.util.logging.Logger;
+//import java.util.concurrent.Executors;
+//import java.util.concurrent.ScheduledExecutorService;
+//import java.util.concurrent.ScheduledFuture;
+//import java.util.concurrent.TimeUnit;
+//import java.util.*;
 //import java.util.Timer;
-//import java.util.TimerTask;
+import java.util.TimerTask;
 
-public class Galip {
+public class Daemon extends TimerTask {
+//	public class Daemon implements Runnable {
+//	ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+//	ScheduledFuture<?> watcher = executor.scheduleAtFixedRate(new Daemon(), 0, 4, TimeUnit.SECONDS);
 
+	@Override
+	public void run() {
+		try{
+			Screenbot.solveCode(true);
+		} catch (Exception e) {e.printStackTrace();}
+	} 
+/*	stop() {
+		watcher.cancel(true);
+		executor.shutdown();
+	}
+	}
+
+	public void run() {
+		System.out.print(java.time.LocalTime.now()+": ");
+		Screenbot.solveCode(false);
+	}
+/*	
+
+	/*
 	private boolean status = false;
 	Logger logger = Logger.getLogger("Timer");
 	Screenbot bot = new Screenbot();
@@ -35,12 +58,15 @@ public class Galip {
 			},0, TimeUnit.NANOSECONDS);
 		}
 	}
+	public void run() {
+		bot.solveCode(false);
+	}
 	
 	class StaticGalip implements Runnable {
 		public void run() {
 			bot.solveCode(true);
 		}
-		
+´		*/		
 		/*		
 		for (int i = 0; i < 10000; i++) {
 			try {
@@ -53,11 +79,8 @@ public class Galip {
 //				Thread.sleep(1000);
 			} catch (Exception e) {e.printStackTrace();}
 		}
+	}
 		*/
-	}
 	
-	public void run() {
-		bot.solveCode(false);
-	}
 	
 }

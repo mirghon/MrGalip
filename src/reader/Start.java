@@ -1,9 +1,13 @@
 package reader;
 
+import java.time.format.DateTimeFormatter;
+
 //import javax.swing.SwingUtilities;
 //import Daemon;
 
 public class Start {
+	
+    private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public static void main(String[] args) {
         try {
@@ -44,8 +48,18 @@ public class Start {
 //////// TESTABFRAGE ////////
 /////////////////////////////
 		
-//		Galip galip = new Galip();galip.solveCode(false);
+//		Screenbot screenbot = new Screenbot();screenbot.solveCode(false);
 	
 	}
+	
+    public static void log(String input) {
+    	System.out.print(java.time.LocalTime.now().format(dtf)+" - ");
+		System.out.println(input);
+    }
+
+    public static void err(String input) {
+    	System.out.print(java.time.LocalTime.now().format(dtf)+" - ");
+		System.err.println(input);
+    }
 
 }
